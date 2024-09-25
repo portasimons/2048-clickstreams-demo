@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN pip install "poetry"
 
 COPY pyproject.toml poetry.lock app.py ./
+COPY src ./src
 
 RUN poetry config virtualenvs.in-project true && \
     poetry install --only=main --no-root

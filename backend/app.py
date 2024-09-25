@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 import src.db as db
-from src.schemas import UserEvent
+from src.schemas import UserEvent, UserPersonalRecord
 
 app = FastAPI()
 
@@ -21,5 +21,11 @@ app.add_middleware(
 
 @app.post('/events')
 async def save_user_event(event: UserEvent, request: Request):
-    await db.insert_data(event, request.client.host)
+    await db.save_event(event, request.client.host)
+    return True
+
+
+@app.post('/records')
+async def save_user_record(record: UserPersonalRecord):
+    await db.save_personal_record(record)
     return True

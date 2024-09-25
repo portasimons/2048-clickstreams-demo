@@ -1,0 +1,47 @@
+services:
+  frontend:
+    image: 2048-frontend
+    container_name: 2048-frontend
+    ports:
+      - 8000:8000
+    networks:
+      - 2048-net
+      
+  backend:
+    image: 2048-backend
+    container_name: 2048-backend
+    environment:
+        CH_USERNAME: default
+        CH_PASS: clickpass
+        CH_HOST: clickhouse:9000
+        CH_DBNAME: default
+    ports:
+      - 5000:5000
+    hostname: backend
+    networks:
+      - 2048-net
+      
+  db:
+    image: clickhouse/clickhouse-server:latest
+    container_name: 2048-clickhouse
+    environment:
+        CLICKHOUSE_USER: default
+        CLICKHOUSE_PASSWORD: clickpass
+    # volumes:
+    #  - your-localpath-to-data:/var/lib/clickhouse
+    hostname: clickhouse
+    ports:
+      - 8123:8123
+      - 9000:9000
+    networks:
+      - 2048-net
+
+volumes:
+  frontend:
+    driver: local
+#  db:
+#    external: true
+
+
+networks:
+  2048-net:
